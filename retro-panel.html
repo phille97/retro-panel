@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!--
+Retro Status Lights
+Author: Philip J.
+License: The MIT License (MIT)
+-->
+<html>
+	<head>
+		<title>Retro Status Lights</title>
+		<script src="https://unpkg.com/vue"></script>
+		<style>
+			@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+			* {
+			    font-family: 'Inconsolata', monospace;
+			}
+			html {
+			    background-color: #0b0b0b;
+			}
+			#app {
+			    margin: auto;
+			}
+			table {
+			    background-color: black;
+			    border-spacing: 10px;
+			}
+			div {
+			    display: table;
+			}
+			h3, h1 {
+		            color: darkgrey;
+			    text-align: center;
+			    margin: 0;
+			}
+			h1 {margin-bottom: 1em;}
+			td {
+			    width: 3em;
+			    height: 2em;
+			    text-align: center;
+			    padding: 8px;
+			    font-size: 13pt;
+			    box-shadow: 0px 0px 0px 2px rgb(29, 29, 29);
+			}
+			td.red.off {
+			    background-color: rgb(29, 29, 29);
+			}
+			td.green.off {
+			    background-color: rgb(29, 29, 29);
+			}
+			td.red.blinking {
+			    animation: red-blink 1s infinite;
+			}
+			td.green.blinking {
+			    animation: green-blink 1s infinite;
+			}
+			td.red.on {
+			    background-color: red;
+			}
+			td.green.on {
+			    background-color: green;
+			}
+			@-webkit-keyframes red-blink {
+				0%, 49% {
+				    background-color: rgb(29, 29, 29);
+				}
+			        50%, 100% {
+				    background-color: red;
+				}
+			}
+			@-webkit-keyframes green-blink {
+				0%, 49% {
+				    background-color: rgb(29, 29, 29);
+				}
+				50%, 100% {
+				    background-color: green;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<h1>Retro Status Lights</h1>
+			<div v-for="group in light_groups">
+				<h3>{{group.title}}</h3>
+				<table>
+					<tbody>
+						<tr v-for="row in group.rows">
+							<td v-for="item in row" v-bind:class="[{ red: item.color == 'red'}, { green: item.color == 'green'}, {off: item.mode == 0}, {on: item.mode == 1}, {blinking: item.mode == 2 }]">{{item.text}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<script>
+		var app = new Vue({
+		    el: '#app',
+		    data: {
+			light_groups: [
+			    {
+				title: "ENGINE 1 / 2",
+				rows: [
+				    [
+				        {text: "PRIM PWR", color: "green", mode: 1 },
+				        {text: "BACKUP PWR", color: "green", mode: 0 },
+				        {text: "FIRE", color: "red", mode: 0 },
+				        {text: "FUEL P01", color: "red", mode: 0 },
+				        {text: "FUEL P02", color: "red", mode: 2 },
+				        {text: "FUEL P03", color: "red", mode: 0 },
+				    ],
+				    [
+				        {text: "PRIM PWR", color: "green", mode: 0 },
+				        {text: "BACKUP PWR", color: "green", mode: 2 },
+				        {text: "FIRE", color: "red", mode: 2 },
+				        {text: "FUEL P01", color: "red", mode: 0 },
+				        {text: "FUEL P02", color: "red", mode: 0 },
+				        {text: "FUEL P03", color: "red", mode: 0 },
+				    ]
+				]
+			    },
+			    {
+				title: "NAVIGATION",
+				rows: [
+				    [
+				         {text: "PRIM PWR", color: "green", mode: 1 },
+				         {text: "AUX PWR", color: "green", mode: 0 },
+				         {text: "NAV FAIL", color: "red", mode: 1 },
+				         {text: "GYRO PRIM", color: "green", mode: 0 },
+				         {text: "GYRO BACKUP", color: "green", mode: 0 },
+				         {text: "GYRO FAIL", color: "red", mode: 2 },
+				    ],
+				    [
+				         {text: "SAT FDR", color: "red", mode: 2 },
+				         {text: "SAT YTR", color: "red", mode: 0 },
+				         {text: "GPS FAIL", color: "red", mode: 0 },
+				         {text: "GPS ON", color: "green", mode: 1 },
+				         {text: "GPS BACKUP", color: "red", mode: 0 },
+				         {text: "STOP FLAG", color: "red", mode: 0 },
+				    ],
+				    [
+				         {text: "AP DISENG", color: "red", mode: 0 },
+				         {text: "F/D", color: "green", mode: 1 },
+				         {text: "ALT HOLD", color: "green", mode: 0 },
+				         {text: "VS FPA", color: "green", mode: 0 },
+				         {text: "APP 1", color: "green", mode: 1 },
+				         {text: "LOC 1", color: "green", mode: 2 },
+				    ],
+				    [
+				         {text: "COOL NAME", color: "green", mode: 1 },
+				         {text: "HACK MODE", color: "red", mode: 2 },
+				         {text: "BRTS LVL", color: "red", mode: 1 },
+				         {text: "HACK DEAD", color: "red", mode: 0 },
+				         {text: "APP 2", color: "green", mode: 1 },
+				         {text: "LOC 2", color: "green", mode: 2 },
+				    ],
+				]
+			    },
+			    {
+				title: "RADIO 1 / 2",
+				rows: [
+			            [
+				         {text: "ON", color: "green", mode: 1 },
+				         {text: "HIGH SWR", color: "red", mode: 0 },
+				         {text: "Tx", color: "red", mode: 0 },
+				         {text: "Rx", color: "green", mode: 1 },
+				         {text: "ANT FAIL", color: "red", mode: 0 },
+				         {text: "SPL FAIL", color: "red", mode: 0 },
+				    ],
+			            [
+				         {text: "ON", color: "green", mode: 1 },
+				         {text: "HIGH SWR", color: "red", mode: 2 },
+				         {text: "Tx", color: "red", mode: 1 },
+				         {text: "Rx", color: "green", mode: 0 },
+				         {text: "ANT FAIL", color: "red", mode: 2 },
+				         {text: "SPL FAIL", color: "red", mode: 0 },
+				    ]
+				]
+			    },
+			]
+		    }
+		})
+		</script>
+	</body>
+</html>
